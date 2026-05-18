@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Uruguay Trip</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream: #F7F3EE;
+  --ink: #1A1814;
+  --ink-mid: #4A4540;
+  --ink-light: #9A948E;
+  --gold: #B8965A;
+  --gold-light: #E8D5B0;
+  --card-bg: #FFFFFF;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.hero {
+  background: var(--ink);
+  color: var(--cream);
+  padding: 4rem 2rem 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 60% 40%, rgba(184,150,90,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero-eyebrow { font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 1rem; font-weight: 500; }
+.hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.4rem, 6vw, 4rem); font-weight: 400; line-height: 1.1; margin-bottom: 1rem; }
+.hero h1 em { font-style: italic; color: var(--gold); }
+.hero-meta { font-size: 14px; color: rgba(247,243,238,0.6); letter-spacing: 0.05em; }
+.hero-divider { width: 40px; height: 1px; background: var(--gold); margin: 1.5rem auto; opacity: 0.6; }
+
+.container { max-width: 880px; margin: 0 auto; padding: 3rem 1.5rem; }
+
+.section { margin-bottom: 3rem; }
+.section-header { display: flex; align-items: baseline; gap: 1rem; margin-bottom: 1.25rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--gold-light); }
+.section-num { font-family: 'Playfair Display', serif; font-size: 13px; color: var(--gold); letter-spacing: 0.1em; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 500; color: var(--ink); }
+.section-subtitle { font-size: 13px; color: var(--ink-light); margin-bottom: 1.25rem; line-height: 1.6; }
+
+.alert-note { background: #FFF8EC; border: 1px solid #E8D5B0; border-left: 3px solid var(--gold); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--ink-mid); margin-bottom: 1.25rem; line-height: 1.55; }
+
+.cards-grid { display: grid; gap: 12px; }
+.cards-grid.cols2 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.cards-grid.cols3 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+
+.opt-card { background: var(--card-bg); border: 1.5px solid #E5DDD4; border-radius: 10px; padding: 1.25rem; cursor: pointer; transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s; position: relative; }
+.opt-card:hover { border-color: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(26,24,20,0.08); }
+.opt-card.selected { border-color: var(--gold); border-width: 2px; box-shadow: 0 2px 12px rgba(184,150,90,0.15); }
+.opt-card.selected::after { content: '✓'; position: absolute; top: 10px; right: 12px; font-size: 12px; color: var(--gold); font-weight: 500; }
+
+.opt-badge { display: inline-block; font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; margin-bottom: 8px; }
+.badge-gold { background: var(--gold-light); color: #7A5C28; }
+.badge-green { background: #D6E8D6; color: #2E5E2E; }
+.badge-amber { background: #F5E6CC; color: #7A5010; }
+.badge-wine { background: #F0DDE0; color: #7A2E3C; }
+.badge-confirmed { background: #E8D5B0; color: #7A5C28; }
+
+.opt-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+.opt-price { font-size: 13px; font-weight: 500; color: var(--gold); margin-bottom: 8px; }
+.opt-desc { font-size: 13px; color: var(--ink-mid); line-height: 1.55; }
+
+.includes-list { margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEE8E0; }
+.includes-list p { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-light); margin-bottom: 6px; }
+.includes-list ul { list-style: none; }
+.includes-list ul li { font-size: 12px; color: var(--ink-mid); padding: 2px 0; display: flex; align-items: flex-start; gap: 6px; }
+.includes-list ul li::before { content: '—'; color: var(--gold); flex-shrink: 0; }
+
+.sub-options { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #EEE8E0; }
+.sub-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); margin-bottom: 10px; }
+.hidden { display: none !important; }
+
+.night-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-light); margin-bottom: 10px; font-weight: 500; margin-top: 1.5rem; }
+.night-label:first-of-type { margin-top: 0; }
+
+.fixed-card { background: var(--card-bg); border: 1.5px solid var(--gold); border-radius: 10px; padding: 1.25rem; display: flex; align-items: flex-start; gap: 1rem; }
+.fixed-icon { font-size: 28px; line-height: 1; flex-shrink: 0; }
+.fixed-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+.fixed-desc { font-size: 13px; color: var(--ink-mid); }
+
+.summary { background: var(--ink); color: var(--cream); border-radius: 12px; padding: 2rem; margin-top: 2.5rem; }
+.summary-heading { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 400; color: var(--gold); margin-bottom: 1.5rem; }
+.summary-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid rgba(247,243,238,0.1); font-size: 14px; gap: 1rem; }
+.summary-row:last-of-type { border-bottom: none; }
+.sum-label { color: rgba(247,243,238,0.55); white-space: nowrap; }
+.sum-value { color: var(--cream); font-weight: 500; text-align: right; }
+.sum-value.pending { color: rgba(247,243,238,0.3); font-style: italic; font-weight: 300; }
+.summary-total { display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(184,150,90,0.4); }
+.total-label { font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); }
+.total-amount { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold); }
+.sum-note { font-size: 11px; color: rgba(247,243,238,0.3); margin-top: 1rem; line-height: 1.6; }
+
+footer { text-align: center; padding: 2rem; font-size: 12px; color: var(--ink-light); letter-spacing: 0.04em; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">Travel Proposal · Confidential</div>
+  <h1><em>Uruguay</em> Trip</h1>
+  <div class="hero-divider"></div>
+  <div class="hero-meta">Buenos Aires → Montevideo &nbsp;·&nbsp; Aug 25–28, 2025 &nbsp;·&nbsp; 3 nights</div>
+</div>
+
+<div class="container">
+
+  <!-- 01 TRANSPORT -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Getting there</span>
+    </div>
+    <p class="section-subtitle">Buenos Aires → Montevideo. Ferry options dock 19 min from the Aloft. The flight lands 45 min away.</p>
+    <div class="cards-grid cols3">
+
+      <div class="opt-card" data-group="transport" data-key="first" data-label="Buquebus First Class" data-price="442" onclick="selectOpt(this)">
+        <span class="opt-badge badge-gold">Best comfort</span>
+        <div class="opt-name">Buquebus First Class</div>
+        <div class="opt-price">$442 USD / person</div>
+        <div class="opt-desc">2h 45min crossing. Wi-Fi included, priority check-in, first group off the ferry. Most seamless arrival experience.</div>
+      </div>
+
+      <div class="opt-card" data-group="transport" data-key="business" data-label="Buquebus Business Class" data-price="230" onclick="selectOpt(this)">
+        <span class="opt-badge badge-amber">Best balance</span>
+        <div class="opt-name">Buquebus Business</div>
+        <div class="opt-price">$230 USD / person</div>
+        <div class="opt-desc">2h 45min crossing. Priority check-in, comfortable seats, second group off. Strong comfort-to-value ratio.</div>
+      </div>
+
+      <div class="opt-card" data-group="transport" data-key="flight" data-label="Flight EZE → MVD" data-price="500" onclick="selectOpt(this)">
+        <span class="opt-badge badge-wine">Fastest in the air</span>
+        <div class="opt-name">Flight EZE → MVD</div>
+        <div class="opt-price">~$500 USD / person</div>
+        <div class="opt-desc">50 min flight. Most expensive option and farthest from the hotel (45 min transfer). Best if schedule is critical.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 02 HOTEL -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Accommodation</span>
+    </div>
+    <div class="fixed-card">
+      <div class="fixed-icon">🏨</div>
+      <div>
+        <span class="opt-badge badge-confirmed">Confirmed</span>
+        <div class="fixed-name">Aloft Montevideo</div>
+        <div class="fixed-desc">Modern Marriott property in the financial district. Rooftop bar, walkable to Ciudad Vieja. Central base for all activities. Rate TBD · 3 nights.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 WINERY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Winery day</span>
+    </div>
+    <div class="alert-note">⚠️ Uruguay enforces a <strong>zero-tolerance alcohol policy</strong> for drivers. A private driver must be arranged for the winery day — regardless of which winery is chosen.</div>
+    <div class="cards-grid cols2">
+
+      <div class="opt-card" data-group="winery" data-key="garzon" data-label="Bodega Garzón" data-price="0" onclick="selectOpt(this); showSub('sub-garzon','sub-bouza')">
+        <span class="opt-badge badge-gold">World-class estate</span>
+        <div class="opt-name">Bodega Garzón</div>
+        <div class="opt-desc" style="margin-bottom:8px">Maldonado · ~3h from Aloft. Hilltop estate, stunning scenery. Culinary director: <strong>Francis Mallmann</strong>. One of South America's most awarded wineries. Three visit types available:</div>
+        <div class="sub-options" id="sub-garzon">
+          <div class="sub-label">Select visit type</div>
+          <div class="cards-grid" style="gap:8px">
+
+            <div class="opt-card" data-group="garzon-visit" data-key="premium" data-label="Garzón — Premium Experience" data-price="340" onclick="event.stopPropagation(); selectOpt(this)">
+              <span class="opt-badge badge-gold">Recommended</span>
+              <div class="opt-name" style="font-size:15px">Premium Experience</div>
+              <div class="opt-price">$340 / person · 4 hours</div>
+              <div class="includes-list">
+                <p>Includes</p>
+                <ul>
+                  <li>Private vineyard visit</li>
+                  <li>Guided winery tour</li>
+                  <li>Exclusive tasting with house sommelier</li>
+                  <li>Semi-private lunch paired with Single Vineyard & Petit Clos wines</li>
+                  <li>Dedicated chef & personalized service</li>
+                </ul>
+              </div>
+              <div class="opt-desc" style="font-size:11px;margin-top:8px;color:var(--ink-light)">Daily at 12:00 PM · Free cancellation up to 48h</div>
+            </div>
+
+            <div class="opt-card" data-group="garzon-visit" data-key="singlevineyard" data-label="Garzón — Single Vineyard Tour" data-price="58" onclick="event.stopPropagation(); selectOpt(this)">
+              <div class="opt-name" style="font-size:15px">Single Vineyard Tour</div>
+              <div class="opt-price">~$58 / person · 1h 40min</div>
+              <div class="includes-list">
+                <p>Includes</p>
+                <ul>
+                  <li>Bilingual guided winery tour</li>
+                  <li>2 Reserva wines during tour</li>
+                  <li>Vineyard walk (weather permitting)</li>
+                  <li>3 Single Vineyard wines + cheese board, bread, olives</li>
+                  <li>3 Colinas de Garzón olive oils</li>
+                </ul>
+              </div>
+              <div class="opt-desc" style="font-size:11px;margin-top:8px;color:var(--ink-light)">Wed–Sun · Free cancellation up to 24h</div>
+            </div>
+
+            <div class="opt-card" data-group="garzon-visit" data-key="reserva" data-label="Garzón — Reserva Tour" data-price="40" onclick="event.stopPropagation(); selectOpt(this)">
+              <div class="opt-name" style="font-size:15px">Reserva Tour</div>
+              <div class="opt-price">$40 / person · 1h 15min</div>
+              <div class="includes-list">
+                <p>Includes</p>
+                <ul>
+                  <li>Bilingual guided winery tour</li>
+                  <li>4 wines during the tour</li>
+                  <li>Walk through vineyard & varietal garden</li>
+                </ul>
+              </div>
+              <div class="opt-desc" style="font-size:11px;margin-top:8px;color:var(--ink-light)">Free cancellation up to 24h</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="opt-card" data-group="winery" data-key="bouza" data-label="Bodega Bouza" data-price="0" onclick="selectOpt(this); showSub('sub-bouza','sub-garzon')">
+        <span class="opt-badge badge-green">Closer option · 45 min from hotel</span>
+        <div class="opt-name">Bodega Bouza</div>
+        <div class="opt-desc" style="margin-bottom:8px">45 min from Aloft — a great alternative if you don't want a 3-hour ride. Great tannat wines, relaxed setting. Can also be a stop en route to Garzón.</div>
+        <div class="sub-options hidden" id="sub-bouza">
+          <div class="sub-label">Select experience</div>
+          <div class="cards-grid" style="gap:8px">
+
+            <div class="opt-card" data-group="bouza-visit" data-key="booking" data-label="Bouza — Tour via Booking.com" data-price="100" onclick="event.stopPropagation(); selectOpt(this)">
+              <span class="opt-badge badge-amber">Option A · via Booking.com</span>
+              <div class="opt-name" style="font-size:15px">Full Day Tour</div>
+              <div class="opt-price">~$100 USD / person</div>
+              <div class="includes-list">
+                <p>Includes</p>
+                <ul>
+                  <li>Hotel pickup and drop-off</li>
+                  <li>Local guide</li>
+                  <li>Wine tasting</li>
+                  <li>Transport by air-conditioned minivan</li>
+                  <li>Food tasting</li>
+                </ul>
+              </div>
+              <div class="opt-desc" style="font-size:11px;margin-top:8px;color:var(--ink-light)">Booked through Booking.com</div>
+            </div>
+
+            <div class="opt-card" data-group="bouza-visit" data-key="direct" data-label="Bouza — Direct booking" data-price="55" onclick="event.stopPropagation(); selectOpt(this)">
+              <span class="opt-badge badge-gold">Option B · Direct with winery</span>
+              <div class="opt-name" style="font-size:15px">Direct with Bodega Bouza</div>
+              <div class="opt-price">From ~$55 USD / person</div>
+              <div class="includes-list">
+                <p>Choose your experience</p>
+                <ul>
+                  <li><strong>7-Course pairing lunch</strong> — 7,000 UYU/person · ~2.5h · 12:00–4:00 PM</li>
+                  <li><strong>Wine tasting + bites</strong> — 2,115 UYU/person · 40 min · Paired by chef & sommelier</li>
+                  <li><strong>Guided tour</strong> — Free · 40 min · Garage, vineyards, winery & cellar · 11 AM, 1:30, 3:00, 4:30 PM</li>
+                </ul>
+              </div>
+              <div class="includes-list" style="margin-top:8px">
+                <p>Round-trip transfer from Montevideo</p>
+                <ul>
+                  <li>850 UYU / person · pickup arranged per reservation</li>
+                  <li>Tour 11:00 AM → pickup 10:00 AM, return 2:30 PM</li>
+                  <li>Tour 1:30 PM → pickup 12:30 PM, return 4:30 PM</li>
+                  <li>Tour 4:30 PM → pickup 3:30 PM, return 6:30 PM</li>
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 04 DINNERS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Dinners — 3 nights</span>
+    </div>
+    <p class="section-subtitle">All options have a strong local South American identity. Recommended for the 3 evenings in Montevideo.</p>
+    <div class="cards-grid cols2">
+
+      <div class="opt-card" style="cursor:default">
+        <span class="opt-badge badge-gold">Top 50 Americas</span>
+        <div class="opt-name">1. Manzanar</div>
+        <div class="opt-desc">South American live-fire grill. Seasonal local ingredients, highly awarded.</div>
+      </div>
+
+      <div class="opt-card" style="cursor:default">
+        <span class="opt-badge badge-wine">Francis Mallmann</span>
+        <div class="opt-name">2. Bodega Garzón Restaurant</div>
+        <div class="opt-desc">Culinary director Francis Mallmann — one of South America's most celebrated chefs. A meal in itself.</div>
+      </div>
+
+      <div class="opt-card" style="cursor:default">
+        <span class="opt-badge badge-gold">Best meat in Uruguay</span>
+        <div class="opt-name">3. García</div>
+        <div class="opt-desc">The go-to for Uruguayan beef. Right next to the Aloft — convenient and exceptional quality.</div>
+      </div>
+
+      <div class="opt-card" style="cursor:default">
+        <div class="opt-name">4. Restaurant Tandory</div>
+        <div class="opt-desc">International and creative dishes with a strong meat focus. Very good and interesting menu.</div>
+      </div>
+
+      <div class="opt-card" style="cursor:default">
+        <div class="opt-name">5. Bodega Bouza</div>
+        <div class="opt-desc">Great option if visiting the winery during the day. Excellent wine list, relaxed atmosphere.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary">
+    <div class="summary-heading">Your selection — at a glance</div>
+    <div class="summary-row">
+      <span class="sum-label">Transport (one-way)</span>
+      <span class="sum-value" id="s-transport"><span class="pending">Select above</span></span>
+    </div>
+    <div class="summary-row">
+      <span class="sum-label">Hotel · 3 nights</span>
+      <span class="sum-value">Aloft Montevideo · rate TBD</span>
+    </div>
+    <div class="summary-row">
+      <span class="sum-label">Winery</span>
+      <span class="sum-value" id="s-winery"><span class="pending">Select above</span></span>
+    </div>
+    <div class="summary-row">
+      <span class="sum-label">Dinners (3 nights)</span>
+      <span class="sum-value">See restaurant list above</span>
+    </div>
+    <div class="summary-total">
+      <span class="total-label">Estimated total</span>
+      <span class="total-amount" id="s-total">—</span>
+    </div>
+    <div class="sum-note">All prices in USD · per person. Transport one-way. Hotel not included. Private driver for winery day not included. Dinner prices are estimates — confirm before booking.</div>
+  </div>
+
+</div>
+
+<footer>Prepared for your review &nbsp;·&nbsp; Uruguay, August 2025</footer>
+
+<script>
+const priceMap = {};
+const labelMap = {};
+
+function selectOpt(el) {
+  const g = el.dataset.group;
+  priceMap[g] = parseInt(el.dataset.price) || 0;
+  labelMap[g] = el.dataset.label;
+  document.querySelectorAll('[data-group="' + g + '"]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  updateSummary();
+}
+
+function showSub(showId, hideId) {
+  document.getElementById(showId).classList.remove('hidden');
+  document.getElementById(hideId).classList.add('hidden');
+}
+
+function fmt(n) { return n > 0 ? '$' + n + ' USD' : 'Free'; }
+function setEl(id, html) { document.getElementById(id).innerHTML = html; }
+
+function updateSummary() {
+  if (labelMap.transport) {
+    setEl('s-transport', labelMap.transport + ' &nbsp;·&nbsp; ' + fmt(priceMap.transport));
+  }
+
+  let winText = '<span class="pending">Select above</span>';
+  let winPrice = 0;
+  const wEl = document.querySelector('[data-group="winery"].selected');
+  if (wEl) {
+    const wKey = wEl.dataset.key;
+    if (wKey === 'garzon') {
+      if (labelMap['garzon-visit']) {
+        winText = labelMap['garzon-visit'] + ' &nbsp;·&nbsp; ' + fmt(priceMap['garzon-visit']);
+        winPrice = priceMap['garzon-visit'];
+      } else {
+        winText = 'Bodega Garzón &nbsp;·&nbsp; <span class="pending">pick visit type</span>';
+      }
+    } else if (wKey === 'bouza') {
+      if (labelMap['bouza-visit']) {
+        winText = labelMap['bouza-visit'] + ' &nbsp;·&nbsp; ' + fmt(priceMap['bouza-visit']);
+        winPrice = priceMap['bouza-visit'];
+      } else {
+        winText = 'Bodega Bouza &nbsp;·&nbsp; <span class="pending">pick experience</span>';
+      }
+    }
+  }
+  setEl('s-winery', winText);
+
+  ['dinner1','dinner2','dinner3'].forEach((d, i) => {
+    if (labelMap[d]) {
+      setEl('s-d' + (i+1), labelMap[d] + ' &nbsp;·&nbsp; ~$' + priceMap[d] + ' / person');
+    }
+  });
+
+  const tp = priceMap.transport || 0;
+  const wp = winPrice;
+  const dp = (priceMap.dinner1||0) + (priceMap.dinner2||0) + (priceMap.dinner3||0);
+  const total = tp + wp + dp;
+  document.getElementById('s-total').textContent = total > 0 ? '~$' + total + ' USD / person' : '—';
+}
+</script>
+</body>
+</html>
